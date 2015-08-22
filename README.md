@@ -16,8 +16,8 @@ Add the plugin much like any other:
 	- `cordova plugin add https://github.com/devgeeks/VolumeSlider.git` or 
 	- `phonegap local plugin add https://github.com/devgeeks/VolumeSlider.git`
 2. To remove this plugin use one of the below: 
-	- `cordova plugin remove org.devgeeks.volumeslider`
-	- `phonegap local plugin remove org.devgeeks.volumeslider`
+	- `cordova plugin remove com.simplec.volumeslider`
+	- `phonegap local plugin remove com.simplec.volumeslider`
 
 ### NOTE: The iOS Simulator does not show MPVolumeViews. To see the slider you have to be running on an actual device.
 

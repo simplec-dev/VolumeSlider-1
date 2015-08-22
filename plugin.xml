@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-        id="org.devgeeks.volumeslider"
+        id="com.simplec.volumeslider"
         version="1.0.0">
 
     <name>VolumeSlider</name>
@@ -10,7 +10,7 @@
     <keywords>volume, slider, change, set, sound, ios</keywords>
     <license>MIT</license>
 
-    <author>Tommy-Carlos Williams (github.com/devgeeks)</author>
+    <author>SimpleC</author>
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />
@@ -32,5 +32,17 @@
     	<source-file src="src/ios/VolumeSlider.m" />
  		<framework src="MediaPlayer.framework" weak="true" />
     </platform>
+    
+	  <!-- android -->
+	  <platform name="android">
+	    <config-file target="res/xml/config.xml" parent="/*">
+	      <feature name="VolumeSlider">
+	        <param name="android-package" value="com.simplec.phonegap.plugins.volumeslider.VolumeSlider" />
+	      </feature>
+	    </config-file>
+	
+	
+	    <source-file src="src/android/com/simplec/phonegap/plugins/volumeslider/VolumeSlider.java" target-dir="src/com/simplec/phonegap/plugins/volumeslider"/>
+	  </platform>
 
 </plugin>
