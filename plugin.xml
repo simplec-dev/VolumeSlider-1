@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-        id="com.simplec.volumeslider"
+        id="com.simplec.plugins.volumeslider"
         version="1.0.0">
 
     <name>VolumeSlider</name>
