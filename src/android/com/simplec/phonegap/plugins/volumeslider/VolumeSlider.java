@@ -1,5 +1,7 @@
 package com.simplec.phonegap.plugins.volumeslider;
 
+import java.lang.reflect.Method;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -7,26 +9,20 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AbsoluteLayout;
-import android.widget.FrameLayout;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.view.WindowManager.LayoutParams;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 public class VolumeSlider extends CordovaPlugin {
 	private static final String CREATE_SLIDER = "createVolumeSlider";
 	private static final String SHOW_SLIDER = "showVolumeSlider";
 	private static final String HIDE_SLIDER = "hideVolumeSlider";
 	
-	private SeekBar seekBar = null;
+	private PopupWindow seekBar = null;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -45,7 +41,7 @@ public class VolumeSlider extends CordovaPlugin {
 				Log.e("VolmeSlider", "show slider execute");
 				if (seekBar!=null) {
 					Log.e("VolmeSlider", "setting visible");
-					seekBar.setVisibility(View.VISIBLE);
+				//	seekBar.setVisibility(View.VISIBLE);
 				}
 				
 				return true;
@@ -53,7 +49,7 @@ public class VolumeSlider extends CordovaPlugin {
 				Log.e("VolmeSlider", "hide slider execute");
 				if (seekBar!=null) {
 					Log.e("VolmeSlider", "setting invisible");
-					seekBar.setVisibility(View.INVISIBLE);
+				//	seekBar.setVisibility(View.INVISIBLE);
 				}
 				
 				return true;
@@ -75,18 +71,29 @@ public class VolumeSlider extends CordovaPlugin {
 			int height = data.getInt(3);
 
 			if (seekBar==null) {
-		        WindowManager wm = (WindowManager) webView.getContext().getSystemService(Context.WINDOW_SERVICE);
-		        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-		        		wm.getDefaultDisplay().getWidth(),
-		        		wm.getDefaultDisplay().getHeight(),
-		                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-		                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-		                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-		                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-		                PixelFormat.TRANSLUCENT);
-		        params.gravity = Gravity.LEFT | Gravity.TOP;
 
-		        FrameLayout oView = new FrameLayout(webView.getContext()); 
+		        // Initialize the view  
+				LinearLayout ll = new LinearLayout(webView.getContext());        
+		        ll.setLayoutParams(new LayoutParams(100, 100));     
+		        ll.setBackgroundColor(Color.BLUE);
+
+		        // Initialize popup 
+		        seekBar = new PopupWindow(ll, 100, 100);     
+
+		        // Set popup's window layout type to TYPE_TOAST     
+		        Method[] methods = PopupWindow.class.getMethods();
+		        for(Method m: methods){
+		            if(m.getName().equals("setWindowLayoutType")) {
+		                try{
+		                    m.invoke(seekBar, WindowManager.LayoutParams.TYPE_TOAST);
+		                }catch(Exception e){
+		                    e.printStackTrace();
+		                }
+		                break;
+		            }
+		        }       
+		       /* 
+		        AbsoluteLayout oView = new AbsoluteLayout(webView.getContext()); 
 				oView.setVisibility(View.VISIBLE);
 		        wm.addView(oView, params);
 		        
@@ -128,7 +135,7 @@ public class VolumeSlider extends CordovaPlugin {
 						// TODO Auto-generated method stub
 						System.out.println(".....333......." + arg1);
 					}
-				});
+				});*/
 				Log.e("VolumeSlider", "created slider");
 			} else {
 				Log.e("VolumeSlider", "updating slider");
