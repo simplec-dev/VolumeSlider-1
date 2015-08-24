@@ -110,8 +110,8 @@ public class VolumeSlider extends CordovaPlugin {
 
 				thumb.setIntrinsicHeight(height);
 				thumb.setIntrinsicWidth(height);
-				thumb.setAlpha(128);
-				thumb.getPaint().setColor(Color.BLUE);
+				thumb.setAlpha(192);
+				thumb.getPaint().setColor(Color.parseColor("#0066FF"));
 				
 				seekBar.setThumb(thumb);
 				seekBar.setProgress(1);
