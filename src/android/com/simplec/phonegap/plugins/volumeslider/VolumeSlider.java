@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,13 +19,18 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.SeekBar;
 
 public class VolumeSlider extends CordovaPlugin {
 	private static final String CREATE_SLIDER = "createVolumeSlider";
 	private static final String SHOW_SLIDER = "showVolumeSlider";
 	private static final String HIDE_SLIDER = "hideVolumeSlider";
 	
-	private PopupWindow seekBar = null;
+	private PopupWindow seekBarWindow = null;
+	int originx;
+	int originy;
+	int width;
+	int height;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -36,23 +43,27 @@ public class VolumeSlider extends CordovaPlugin {
 		try {
 			if (CREATE_SLIDER.equals(action)) {
 				Log.e("VolmeSlider", "creating slider execute");
-				createSlider(data);
+
+				originx = data.getInt(0);
+				originy = data.getInt(1);
+				width = data.getInt(2);
+				height = data.getInt(3);
+	
 				return true;
 			} else if (SHOW_SLIDER.equals(action)) {
-				Log.e("VolmeSlider", "show slider execute");
-				if (seekBar!=null) {
-					Log.e("VolmeSlider", "setting visible");
-				//	seekBar.setVisibility(View.VISIBLE);
+				if (seekBarWindow!=null) {
+					seekBarWindow.dismiss();
+					seekBarWindow = null;
 				}
+				
+				createSlider();
+		        seekBarWindow.showAtLocation(webView, Gravity.LEFT | Gravity.TOP, originx, originy);
 				
 				return true;
 			} else if (HIDE_SLIDER.equals(action)) {
-				Log.e("VolmeSlider", "hide slider execute");
-				if (seekBar!=null) {
-					seekBar.dismiss();
-					seekBar = null;
-					Log.e("VolmeSlider", "setting invisible");
-				//	seekBar.setVisibility(View.INVISIBLE);
+				if (seekBarWindow!=null) {
+					seekBarWindow.dismiss();
+					seekBarWindow = null;
 				}
 				
 				return true;
@@ -66,67 +77,54 @@ public class VolumeSlider extends CordovaPlugin {
 		}
 	}
 
-	public void createSlider(JSONArray data) {
+	public void createSlider() {
 		try {
-			int originx = data.getInt(0);
-			int originy = data.getInt(1);
-			int width = data.getInt(2);
-			int height = data.getInt(3);
-
-			Log.e("VolumeSlider", "originx: "+originx);
-			Log.e("VolumeSlider", "originy: "+originy);
-			Log.e("VolumeSlider", "width: "+width);
-			Log.e("VolumeSlider", "height: "+height);
-			
-			
-			if (seekBar==null) {
-
+			if (seekBarWindow==null) {
 		        // Initialize the view  
 				LinearLayout ll = new LinearLayout(webView.getContext());        
 		        ll.setLayoutParams(new LayoutParams(width, height));     
-		        ll.setBackgroundColor(Color.BLUE);
+		        ll.setBackgroundColor(Color.TRANSPARENT);
 
 		        // Initialize popup 
-		        seekBar = new PopupWindow(ll, width, height);     
-		        seekBar.showAtLocation(webView, Gravity.LEFT | Gravity.TOP, originx, originy);
+		        seekBarWindow = new PopupWindow(ll, width, height);    
 
 		        // Set popup's window layout type to TYPE_TOAST     
 		        Method[] methods = PopupWindow.class.getMethods();
 		        for(Method m: methods){
 		            if(m.getName().equals("setWindowLayoutType")) {
 		                try{
-		                    m.invoke(seekBar, WindowManager.LayoutParams.TYPE_TOAST);
+		                    m.invoke(seekBarWindow, WindowManager.LayoutParams.TYPE_TOAST);
 		                }catch(Exception e){
 		                    e.printStackTrace();
 		                }
 		                break;
 		            }
 		        }       
-		       /* 
-		        AbsoluteLayout oView = new AbsoluteLayout(webView.getContext()); 
-				oView.setVisibility(View.VISIBLE);
-		        wm.addView(oView, params);
 		        
-				seekBar = new SeekBar(oView.getContext());
+		        
+		        SeekBar seekBar = new SeekBar(webView.getContext());
 				seekBar.setMax(100);
-				// seekBar.setIndeterminate(true);
-
 				ShapeDrawable thumb = new ShapeDrawable(new OvalShape());
 
 				thumb.setIntrinsicHeight(height);
 				thumb.setIntrinsicWidth(height/2);
 				seekBar.setThumb(thumb);
 				seekBar.setProgress(1);
-				seekBar.setVisibility(View.INVISIBLE);
+				seekBar.setVisibility(View.VISIBLE);
 				seekBar.setBackgroundColor(Color.BLUE);
+				
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
+				seekBar.setLayoutParams(params);
+				
+				ll.addView(seekBar);
+
+		       /* 
 
 				FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
 				seekBar.setLayoutParams(lp);
 
 				seekBar.setVisibility(View.VISIBLE);
 				oView.addView(seekBar);
-				
-				cordova.getActivity().setContentView(oView, params);
 
 				seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
