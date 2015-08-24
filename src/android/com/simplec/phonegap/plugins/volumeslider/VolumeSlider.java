@@ -103,7 +103,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 		        SeekBar seekBar = new SeekBar(webView.getContext());
 		        
-		        float[] outR = new float[] {6,6,6,6,6,6,6,6};  
+		   /*     float[] outR = new float[] {6,6,6,6,6,6,6,6};  
 		        ShapeDrawable thumb = new ShapeDrawable(new RoundRectShape(outR, null, null));      
 		        thumb.setIntrinsicHeight(height);
 		        thumb.setIntrinsicWidth(height);    
@@ -123,7 +123,7 @@ public class VolumeSlider extends CordovaPlugin {
 				seekBar.setMax(100);
 				seekBar.setProgress(50);
 
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width-2*height, height);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 				params.gravity = Gravity.CENTER_HORIZONTAL;
 				seekBar.setLayoutParams(params);
 				
