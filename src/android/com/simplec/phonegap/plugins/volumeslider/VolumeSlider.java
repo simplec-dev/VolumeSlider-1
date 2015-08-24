@@ -1,7 +1,5 @@
 package com.simplec.phonegap.plugins.volumeslider;
 
-import java.lang.reflect.Method;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -11,12 +9,12 @@ import org.json.JSONException;
 
 import android.graphics.Color;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 public class VolumeSlider extends CordovaPlugin {
 	private static final String CREATE_SLIDER = "createVolumeSlider";
@@ -72,28 +70,21 @@ public class VolumeSlider extends CordovaPlugin {
 			int height = data.getInt(3);
 
 			if (seekBar==null) {
+				// Get the screen size.
 
-		        // Initialize the view  
-				LinearLayout ll = new LinearLayout(webView.getContext());        
-		        ll.setLayoutParams(new LayoutParams(100, 100));     
-		        ll.setBackgroundColor(Color.BLUE);
-
-		        // Initialize popup 
-		        seekBar = new PopupWindow(ll, 100, 100);     
-		        seekBar.showAtLocation(webView, Gravity.CENTER, 0, 0);
-
-		        // Set popup's window layout type to TYPE_TOAST     
-		        Method[] methods = PopupWindow.class.getMethods();
-		        for(Method m: methods){
-		            if(m.getName().equals("setWindowLayoutType")) {
-		                try{
-		                    m.invoke(seekBar, WindowManager.LayoutParams.TYPE_TOAST);
-		                }catch(Exception e){
-		                    e.printStackTrace();
-		                }
-		                break;
-		            }
-		        }       
+		        SurfaceView _local = new SurfaceView(webView.getContext());
+		        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+		                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		        params.leftMargin = 250;
+		        params.topMargin = 130;
+		        params.width = 210;
+		        params.height = 265;
+		        _local.setLayoutParams(params);
+		        _local.setVisibility(View.VISIBLE);
+		        _local.setBackgroundColor(Color.WHITE);
+		        ((ViewGroup) webView.getParent()).addView(_local);
+		        
+				
 		       /* 
 		        AbsoluteLayout oView = new AbsoluteLayout(webView.getContext()); 
 				oView.setVisibility(View.VISIBLE);
