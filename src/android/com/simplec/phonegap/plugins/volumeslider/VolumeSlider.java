@@ -10,12 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
@@ -102,23 +101,22 @@ public class VolumeSlider extends CordovaPlugin {
 		            }
 		        }       
 		        
-		        
-		        SeekBar seekBar = new SeekBar(webView.getContext());
-				seekBar.setMax(100);
-				seekBar.setProgress(50);
-				ShapeDrawable thumb = new ShapeDrawable(new OvalShape());
 
+		        SeekBar seekBar = new SeekBar(webView.getContext());
+		        
+				ShapeDrawable thumb = new ShapeDrawable(new OvalShape());
 				thumb.setIntrinsicHeight(height);
 				thumb.setIntrinsicWidth(height);
 				thumb.setAlpha(192);
-				thumb.getPaint().setColor(Color.parseColor("#0066FF"));
-				
+				thumb.getPaint().setColor(Color.parseColor("#33B5E5"));	
 				seekBar.setThumb(thumb);
-				seekBar.setProgress(1);
-			//	seekBar.setProgressDrawable(new ColorDrawable(Color.BLUE));
-				seekBar.setVisibility(View.VISIBLE);
-			//	seekBar.setBackgroundColor(Color.BLUE);
 				
+		        seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#33B5E5"), PorterDuff.Mode.SRC_IN);
+				
+				seekBar.setMax(100);
+				seekBar.setProgress(50);
+				seekBar.setThumbOffset(20);
+
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 				seekBar.setLayoutParams(params);
 				
