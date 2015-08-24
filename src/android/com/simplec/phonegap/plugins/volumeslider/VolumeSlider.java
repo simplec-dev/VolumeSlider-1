@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -85,7 +86,7 @@ public class VolumeSlider extends CordovaPlugin {
 		                PixelFormat.TRANSLUCENT);
 		        params.gravity = Gravity.LEFT | Gravity.TOP;
 
-				AbsoluteLayout oView = new AbsoluteLayout(webView.getContext()); 
+		        FrameLayout oView = new FrameLayout(webView.getContext()); 
 				oView.setVisibility(View.VISIBLE);
 		        wm.addView(oView, params);
 		        
@@ -102,11 +103,13 @@ public class VolumeSlider extends CordovaPlugin {
 				seekBar.setVisibility(View.INVISIBLE);
 				seekBar.setBackgroundColor(Color.BLUE);
 
-				AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(width, height, originx, originy);
+				FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
 				seekBar.setLayoutParams(lp);
 
 				seekBar.setVisibility(View.VISIBLE);
 				oView.addView(seekBar);
+				
+				cordova.getActivity().setContentView(oView, params);
 
 				seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -131,8 +134,8 @@ public class VolumeSlider extends CordovaPlugin {
 				Log.e("VolumeSlider", "updating slider");
 			}
 
-			AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(width, height, originx, originy);
-			seekBar.setLayoutParams(lp);
+		//	AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(width, height, originx, originy);
+		//	seekBar.setLayoutParams(lp);
 
 		} catch (Exception e) {
 			Log.e("VolumeSlider", e.getMessage());
