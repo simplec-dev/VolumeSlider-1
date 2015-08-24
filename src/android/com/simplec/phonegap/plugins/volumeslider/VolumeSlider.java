@@ -161,7 +161,12 @@ public class VolumeSlider extends CordovaPlugin {
 		        seekBar.setPadding(height, 0, height, 0);
 		        
 				seekBar.setMax(100);
-				seekBar.setProgress(50);
+
+	        	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
+		    	int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+				int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC)/max * 100;
+				
+				seekBar.setProgress(volume);
 
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 				params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -191,11 +196,11 @@ public class VolumeSlider extends CordovaPlugin {
 			streams = new int[] {
 			        4,  // STREAM_VOICE_CALL
 			        7,  // STREAM_SYSTEM
-			        5,  // STREAM_RING
+			    //    5,  // STREAM_RING
 			        11, // STREAM_MUSIC
 			        6,  // STREAM_ALARM
 			        5,  // STREAM_NOTIFICATION
-			        7,  // STREAM_BLUETOOTH_SCO
+			   //     7,  // STREAM_BLUETOOTH_SCO
 			        7,  // STREAM_SYSTEM_ENFORCED
 			        11, // STREAM_DTMF
 			        11  // STREAM_TTS

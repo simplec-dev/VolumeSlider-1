@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         id="com.simplec.plugins.volumeslider"
-        version="1.0.27">
+        version="1.0.28">
 
     <name>VolumeSlider</name>
 
@@ -41,6 +41,9 @@
 	      </feature>
 	    </config-file>
 	
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+        </config-file>
 	
 	    <source-file src="src/android/com/simplec/phonegap/plugins/volumeslider/VolumeSlider.java" target-dir="src/com/simplec/phonegap/plugins/volumeslider"/>
 	  </platform>
