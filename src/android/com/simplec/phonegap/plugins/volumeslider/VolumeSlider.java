@@ -49,6 +49,8 @@ public class VolumeSlider extends CordovaPlugin {
 			} else if (HIDE_SLIDER.equals(action)) {
 				Log.e("VolmeSlider", "hide slider execute");
 				if (seekBar!=null) {
+					seekBar.dismiss();
+					seekBar = null;
 					Log.e("VolmeSlider", "setting invisible");
 				//	seekBar.setVisibility(View.INVISIBLE);
 				}
