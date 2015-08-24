@@ -163,8 +163,9 @@ public class VolumeSlider extends CordovaPlugin {
 				seekBar.setMax(100);
 
 	        	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
-		    	int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-				int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC)/max * 100;
+		    	double max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		    	double dVol = 100 * am.getStreamVolume(AudioManager.STREAM_MUSIC) / max;
+				int volume = (int)Math.floor(dVol);
 				
 				seekBar.setProgress(volume);
 
