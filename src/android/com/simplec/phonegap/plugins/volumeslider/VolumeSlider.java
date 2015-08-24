@@ -117,7 +117,7 @@ public class VolumeSlider extends CordovaPlugin {
 				seekBar.setProgress(1);
 				seekBar.setProgressDrawable(new ColorDrawable(Color.BLUE));
 				seekBar.setVisibility(View.VISIBLE);
-				seekBar.setBackgroundColor(Color.BLUE);
+			//	seekBar.setBackgroundColor(Color.BLUE);
 				
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 				seekBar.setLayoutParams(params);
