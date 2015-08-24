@@ -6,6 +6,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -26,10 +27,10 @@ public class VolumeSlider extends CordovaPlugin {
 	private static final String HIDE_SLIDER = "hideVolumeSlider";
 	
 	private PopupWindow seekBarWindow = null;
-	int originx;
-	int originy;
-	int width;
-	int height;
+	private int originx = 0;
+	private int originy = 0;
+	private int width = 0;
+	private int height = 0;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -55,7 +56,7 @@ public class VolumeSlider extends CordovaPlugin {
 					seekBarWindow = null;
 				}
 				
-				createSlider();
+				createSlider(callbackContext);
 		        seekBarWindow.showAtLocation(webView, Gravity.LEFT | Gravity.TOP, originx, originy);
 				
 				return true;
@@ -75,9 +76,42 @@ public class VolumeSlider extends CordovaPlugin {
 			return false;
 		}
 	}
+	
+	private class VolumeSeekBarListener implements SeekBar.OnSeekBarChangeListener {
+		private CallbackContext callbackContext;
+		
+		public VolumeSeekBarListener(CallbackContext callbackContext) {
+			this.callbackContext = callbackContext;
+		}
 
-	public void createSlider() {
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			int progress = seekBar.getProgress();
+            PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
+            progressResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(progressResult);
+		}
+
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			int progress = seekBar.getProgress();
+            PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
+            progressResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(progressResult);
+		}
+
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
+            progressResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(progressResult);
+		}
+    }
+
+	public void createSlider(CallbackContext callbackContext) {
 		try {
+			if (seekBarWindow!=null) {
+				seekBarWindow.dismiss();
+				seekBarWindow = null;
+			}			
+
 			if (seekBarWindow==null) {
 		        // Initialize the view  
 				LinearLayout ll = new LinearLayout(webView.getContext());        
@@ -98,8 +132,7 @@ public class VolumeSlider extends CordovaPlugin {
 		                }
 		                break;
 		            }
-		        }       
-		        
+		        }		        
 
 		        SeekBar seekBar = new SeekBar(webView.getContext());
 		        
@@ -110,17 +143,7 @@ public class VolumeSlider extends CordovaPlugin {
 		        thumb.getPaint().setColor(Color.GRAY);
 		        seekBar.setThumb(thumb);
 		        seekBar.setPadding(height, 0, height, 0);
-		      
-			/*	ShapeDrawable thumb = new ShapeDrawable(new OvalShape());
-				thumb.setIntrinsicHeight(height);
-				thumb.setIntrinsicWidth(height);
-				thumb.setAlpha(192);
-				thumb.getPaint().setColor(Color.parseColor("#aaaaaa"));	
-				seekBar.setThumb(thumb);
-
-		        seekBar.getProgressDrawable().clearColorFilter();
-		        seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#33B5E5"), PorterDuff.Mode.SRC_IN);
-				*/
+		        
 				seekBar.setMax(100);
 				seekBar.setProgress(50);
 
@@ -130,33 +153,7 @@ public class VolumeSlider extends CordovaPlugin {
 				
 				ll.addView(seekBar);
 
-		       /* 
-
-				FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
-				seekBar.setLayoutParams(lp);
-
-				seekBar.setVisibility(View.VISIBLE);
-				oView.addView(seekBar);
-
-				seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-					public void onStopTrackingTouch(SeekBar arg0) {
-						// TODO Auto-generated method stub
-						System.out.println(".....111.......");
-
-					}
-
-					public void onStartTrackingTouch(SeekBar arg0) {
-						// TODO Auto-generated method stub
-						System.out.println(".....222.......");
-					}
-
-					public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-						// TODO Auto-generated method stub
-						System.out.println(".....333......." + arg1);
-					}
-				});*/
-				Log.e("VolumeSlider", "created slider");
+				seekBar.setOnSeekBarChangeListener(new VolumeSeekBarListener(callbackContext));
 			} else {
 				Log.e("VolumeSlider", "updating slider");
 			}
