@@ -21,7 +21,7 @@ public class VolumeSlider extends CordovaPlugin {
 	private static final String SHOW_SLIDER = "showVolumeSlider";
 	private static final String HIDE_SLIDER = "hideVolumeSlider";
 	
-	private PopupWindow seekBar = null;
+	private SurfaceView seekBar = null;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -83,6 +83,7 @@ public class VolumeSlider extends CordovaPlugin {
 		        _local.setVisibility(View.VISIBLE);
 		        _local.setBackgroundColor(Color.WHITE);
 		        ((ViewGroup) webView.getParent()).addView(_local);
+		        seekBar = _local;
 		        
 				
 		       /* 
