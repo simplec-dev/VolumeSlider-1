@@ -23,8 +23,8 @@ module.exports = {
 	/**
 	 * Show the volume slider
 	 */
-	showVolumeSlider : function() {
-		exec(null, null, "VolumeSlider","showVolumeSlider", []);
+	showVolumeSlider : function(callback) {
+		exec(callback, null, "VolumeSlider","showVolumeSlider", []);
 	},
 	/**
 	 * Hide the volume slider
