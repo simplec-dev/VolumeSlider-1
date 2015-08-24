@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.util.Log;
@@ -104,12 +105,17 @@ public class VolumeSlider extends CordovaPlugin {
 		        
 		        SeekBar seekBar = new SeekBar(webView.getContext());
 				seekBar.setMax(100);
+				seekBar.setProgress(50);
 				ShapeDrawable thumb = new ShapeDrawable(new OvalShape());
 
 				thumb.setIntrinsicHeight(height);
-				thumb.setIntrinsicWidth(height/2);
+				thumb.setIntrinsicWidth(height);
+				thumb.setAlpha(128);
+				thumb.getPaint().setColor(Color.BLUE);
+				
 				seekBar.setThumb(thumb);
 				seekBar.setProgress(1);
+				seekBar.setProgressDrawable(new ColorDrawable(Color.BLUE));
 				seekBar.setVisibility(View.VISIBLE);
 				seekBar.setBackgroundColor(Color.BLUE);
 				
