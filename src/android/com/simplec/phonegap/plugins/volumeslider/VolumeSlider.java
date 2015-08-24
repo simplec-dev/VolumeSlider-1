@@ -123,7 +123,8 @@ public class VolumeSlider extends CordovaPlugin {
 				seekBar.setMax(100);
 				seekBar.setProgress(50);
 
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width-2*height, height);
+				params.gravity = Gravity.CENTER_HORIZONTAL;
 				seekBar.setLayoutParams(params);
 				
 				ll.addView(seekBar);
