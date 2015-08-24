@@ -30,14 +30,6 @@ public class VolumeSlider extends CordovaPlugin {
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 		// TODO Auto-generated method stub
 		super.initialize(cordova, webView);
-		JSONArray data = new JSONArray();
-		data.put(0);
-		data.put(0);
-		data.put(500);
-		data.put(100);
-		createSlider(data);
-
-		seekBar.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -105,6 +97,11 @@ public class VolumeSlider extends CordovaPlugin {
 				seekBar.setProgress(1);
 				seekBar.setVisibility(View.INVISIBLE);
 				seekBar.setBackgroundColor(Color.BLUE);
+
+				AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(width, height, originx, originy);
+				seekBar.setLayoutParams(lp);
+				
+				oView.addView(seekBar);
 
 				seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
