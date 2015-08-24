@@ -1,16 +1,20 @@
 package com.simplec.phonegap.plugins.volumeslider;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager.LayoutParams;
+import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -21,6 +25,20 @@ public class VolumeSlider extends CordovaPlugin {
 	private static final String HIDE_SLIDER = "hideVolumeSlider";
 	
 	private SeekBar seekBar = null;
+
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+		// TODO Auto-generated method stub
+		super.initialize(cordova, webView);
+		JSONArray data = new JSONArray();
+		data.put(0);
+		data.put(0);
+		data.put(500);
+		data.put(100);
+		createSlider(data);
+
+		seekBar.setVisibility(View.VISIBLE);
+	}
 
 	@Override
 	public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
@@ -63,7 +81,19 @@ public class VolumeSlider extends CordovaPlugin {
 			int height = data.getInt(3);
 
 			if (seekBar==null) {
-				seekBar = new SeekBar(webView.getContext());
+
+				AbsoluteLayout oView = new AbsoluteLayout(webView.getContext());   
+		        oView.setBackgroundColor(0x00000000); // The translucent red color
+		        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+		                WindowManager.LayoutParams.MATCH_PARENT,
+		                WindowManager.LayoutParams.MATCH_PARENT,
+		                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+		                0 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+		                PixelFormat.TRANSLUCENT);        
+		        WindowManager wm = (WindowManager) webView.getContext().getSystemService(Context.WINDOW_SERVICE);
+		        wm.addView(oView, params);
+		        
+				seekBar = new SeekBar(oView.getContext());
 				seekBar.setMax(100);
 				// seekBar.setIndeterminate(true);
 
