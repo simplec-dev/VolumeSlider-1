@@ -11,6 +11,7 @@ import org.json.JSONException;
 
 import android.graphics.Color;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -79,6 +80,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 		        // Initialize popup 
 		        seekBar = new PopupWindow(ll, 100, 100);     
+		        seekBar.showAtLocation(webView, Gravity.CENTER, 0, 0);
 
 		        // Set popup's window layout type to TYPE_TOAST     
 		        Method[] methods = PopupWindow.class.getMethods();
