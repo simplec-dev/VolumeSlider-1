@@ -71,6 +71,12 @@ public class VolumeSlider extends CordovaPlugin {
 			int width = data.getInt(2);
 			int height = data.getInt(3);
 
+			Log.e("VolumeSlider", "originx: "+originx);
+			Log.e("VolumeSlider", "originy: "+originy);
+			Log.e("VolumeSlider", "width: "+width);
+			Log.e("VolumeSlider", "height: "+height);
+			
+			
 			if (seekBar==null) {
 
 		        // Initialize the view  
@@ -80,7 +86,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 		        // Initialize popup 
 		        seekBar = new PopupWindow(ll, width, height);     
-		        seekBar.showAtLocation(webView, Gravity.CENTER, originx, originy);
+		        seekBar.showAtLocation(webView, Gravity.LEFT | Gravity.TOP, originx, originy);
 
 		        // Set popup's window layout type to TYPE_TOAST     
 		        Method[] methods = PopupWindow.class.getMethods();
