@@ -103,12 +103,13 @@ public class VolumeSlider extends CordovaPlugin {
 
 		        SeekBar seekBar = new SeekBar(webView.getContext());
 		        
-		   /*     float[] outR = new float[] {6,6,6,6,6,6,6,6};  
+		        float[] outR = new float[] {6,6,6,6,6,6,6,6};  
 		        ShapeDrawable thumb = new ShapeDrawable(new RoundRectShape(outR, null, null));      
 		        thumb.setIntrinsicHeight(height);
 		        thumb.setIntrinsicWidth(height);    
 		        thumb.getPaint().setColor(Color.GRAY);
 		        seekBar.setThumb(thumb);
+		        seekBar.setPadding(height, 0, height, 0);
 		      
 			/*	ShapeDrawable thumb = new ShapeDrawable(new OvalShape());
 				thumb.setIntrinsicHeight(height);
