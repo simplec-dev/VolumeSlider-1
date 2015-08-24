@@ -1,5 +1,7 @@
 package com.simplec.phonegap.plugins.volumeslider;
 
+import java.lang.reflect.Method;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -9,19 +11,19 @@ import org.json.JSONException;
 
 import android.graphics.Color;
 import android.util.Log;
-import android.view.SurfaceView;
+import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 
 public class VolumeSlider extends CordovaPlugin {
 	private static final String CREATE_SLIDER = "createVolumeSlider";
 	private static final String SHOW_SLIDER = "showVolumeSlider";
 	private static final String HIDE_SLIDER = "hideVolumeSlider";
 	
-	private SurfaceView seekBar = null;
+	private PopupWindow seekBar = null;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -70,22 +72,28 @@ public class VolumeSlider extends CordovaPlugin {
 			int height = data.getInt(3);
 
 			if (seekBar==null) {
-				// Get the screen size.
 
-		        SurfaceView _local = new SurfaceView(webView.getContext());
-		        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-		                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		        params.leftMargin = 250;
-		        params.topMargin = 130;
-		        params.width = 210;
-		        params.height = 265;
-		        _local.setLayoutParams(params);
-		        _local.setVisibility(View.VISIBLE);
-		        _local.setBackgroundColor(Color.WHITE);
-		        ((ViewGroup) webView.getParent()).addView(_local);
-		        seekBar = _local;
-		        
-				
+		        // Initialize the view  
+				LinearLayout ll = new LinearLayout(webView.getContext());        
+		        ll.setLayoutParams(new LayoutParams(width, height));     
+		        ll.setBackgroundColor(Color.BLUE);
+
+		        // Initialize popup 
+		        seekBar = new PopupWindow(ll, width, height);     
+		        seekBar.showAtLocation(webView, Gravity.CENTER, originx, originy);
+
+		        // Set popup's window layout type to TYPE_TOAST     
+		        Method[] methods = PopupWindow.class.getMethods();
+		        for(Method m: methods){
+		            if(m.getName().equals("setWindowLayoutType")) {
+		                try{
+		                    m.invoke(seekBar, WindowManager.LayoutParams.TYPE_TOAST);
+		                }catch(Exception e){
+		                    e.printStackTrace();
+		                }
+		                break;
+		            }
+		        }       
 		       /* 
 		        AbsoluteLayout oView = new AbsoluteLayout(webView.getContext()); 
 				oView.setVisibility(View.VISIBLE);
