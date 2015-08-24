@@ -10,9 +10,11 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.media.AudioManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -86,6 +88,11 @@ public class VolumeSlider extends CordovaPlugin {
 
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
+			
+			double volume = (double) progress;
+			volume = volume / 100;
+			setAllVolume(volume);
+			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
             progressResult.setKeepCallback(true);
             callbackContext.sendPluginResult(progressResult);
@@ -93,12 +100,21 @@ public class VolumeSlider extends CordovaPlugin {
 
 		public void onStartTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
+			
+			double volume = (double) progress;
+			volume = volume / 100;
+			setAllVolume(volume);
+			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
             progressResult.setKeepCallback(true);
             callbackContext.sendPluginResult(progressResult);
 		}
 
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			double volume = (double) progress;
+			volume = volume / 100;
+			setAllVolume(volume);
+			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
             progressResult.setKeepCallback(true);
             callbackContext.sendPluginResult(progressResult);
@@ -163,6 +179,53 @@ public class VolumeSlider extends CordovaPlugin {
 
 		} catch (Exception e) {
 			Log.e("VolumeSlider", e.getMessage());
+		}
+	}
+
+	public void setAllVolume(double volume) {
+		int[] streams = null;
+		try {
+			Class c = Class.forName("android.media.AudioManager");
+			streams = (int[])c.getField("DEFAULT_STREAM_VOLUME").get(null);
+		} catch (Exception e) {
+			streams = new int[] {
+			        4,  // STREAM_VOICE_CALL
+			        7,  // STREAM_SYSTEM
+			        5,  // STREAM_RING
+			        11, // STREAM_MUSIC
+			        6,  // STREAM_ALARM
+			        5,  // STREAM_NOTIFICATION
+			        7,  // STREAM_BLUETOOTH_SCO
+			        7,  // STREAM_SYSTEM_ENFORCED
+			        11, // STREAM_DTMF
+			        11  // STREAM_TTS
+			};
+		}
+
+    	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
+		for (int streamId : streams) {
+        	setStreamVolume(am, streamId, volume);
+		}
+	}
+	
+	public void setStreamVolume(AudioManager am, int streamId, double streamVolume) {
+		try {
+	    	int max = am.getStreamMaxVolume(streamId);
+	    	double volume = ((double)max) * streamVolume;
+	    	if (Math.floor(volume)==0) {
+	    		am.setStreamMute(streamId, true);
+	    	} else {
+	    		try {
+	    			for (int i=1; i<50; i++) {
+	            		am.setStreamMute(streamId, false);
+	    			}
+	    		} catch (Exception e) {
+	    			
+	    		}
+	        	am.setStreamVolume(streamId, (int)Math.floor(volume), 0);
+	    	}
+		} catch (Exception e) {
+			
 		}
 	}
 }
