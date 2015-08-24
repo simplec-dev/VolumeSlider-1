@@ -13,6 +13,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
@@ -73,16 +74,19 @@ public class VolumeSlider extends CordovaPlugin {
 			int height = data.getInt(3);
 
 			if (seekBar==null) {
-
-				AbsoluteLayout oView = new AbsoluteLayout(webView.getContext());   
-		        oView.setBackgroundColor(0x00000000); // The translucent red color
-		        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-		                WindowManager.LayoutParams.MATCH_PARENT,
-		                WindowManager.LayoutParams.MATCH_PARENT,
-		                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-		                0 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-		                PixelFormat.TRANSLUCENT);        
 		        WindowManager wm = (WindowManager) webView.getContext().getSystemService(Context.WINDOW_SERVICE);
+		        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+		        		wm.getDefaultDisplay().getWidth(),
+		        		wm.getDefaultDisplay().getHeight(),
+		                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+		                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+		                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+		                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+		                PixelFormat.TRANSLUCENT);
+		        params.gravity = Gravity.LEFT | Gravity.TOP;
+
+				AbsoluteLayout oView = new AbsoluteLayout(webView.getContext()); 
+				oView.setVisibility(View.VISIBLE);
 		        wm.addView(oView, params);
 		        
 				seekBar = new SeekBar(oView.getContext());
@@ -100,7 +104,8 @@ public class VolumeSlider extends CordovaPlugin {
 
 				AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(width, height, originx, originy);
 				seekBar.setLayoutParams(lp);
-				
+
+				seekBar.setVisibility(View.VISIBLE);
 				oView.addView(seekBar);
 
 				seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
