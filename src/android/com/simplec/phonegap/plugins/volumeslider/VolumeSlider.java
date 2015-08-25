@@ -90,7 +90,7 @@ public class VolumeSlider extends CordovaPlugin {
 			int progress = seekBar.getProgress();
 			
 			double volume = (double) progress;
-			volume = volume / 100;
+			volume = volume / (double)seekBar.getMax();
 			setAllVolume(volume);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -102,7 +102,7 @@ public class VolumeSlider extends CordovaPlugin {
 			int progress = seekBar.getProgress();
 			
 			double volume = (double) progress;
-			volume = volume / 100;
+			volume = volume / (double)seekBar.getMax();
 			setAllVolume(volume);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -112,7 +112,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			double volume = (double) progress;
-			volume = volume / 100;
+			volume = volume / (double)seekBar.getMax();
 			setAllVolume(volume);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -159,18 +159,12 @@ public class VolumeSlider extends CordovaPlugin {
 		        thumb.getPaint().setColor(Color.GRAY);
 		        seekBar.setThumb(thumb);
 		        seekBar.setPadding(height, 0, height, 0);
-		        
-				seekBar.setMax(100);
 
 	        	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
 		    	double max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		    	Log.e("VolumeSlider", "Max media stream vol: "+max);
-		    	max = am.getStreamMaxVolume(AudioManager.USE_DEFAULT_STREAM_TYPE);
-		    	Log.e("VolumeSlider", "Max dev stream vol: "+max);
-		    	double dVol = 100 * am.getStreamVolume(AudioManager.USE_DEFAULT_STREAM_TYPE) / max;
-				int volume = (int)Math.floor(dVol);
+				seekBar.setMax((int)max);
 				
-				seekBar.setProgress(volume);
+				seekBar.setProgress(am.getStreamVolume(AudioManager.STREAM_MUSIC));
 
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 				params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -221,7 +215,7 @@ public class VolumeSlider extends CordovaPlugin {
 		try {
 	    	int max = am.getStreamMaxVolume(streamId);
 	    	double volume = ((double)max) * streamVolume;
-	    	if (Math.floor(volume)==0) {
+	    	if (Math.round(volume)==0) {
 	    		am.setStreamMute(streamId, true);
 	    	} else {
 	    		try {
@@ -231,7 +225,7 @@ public class VolumeSlider extends CordovaPlugin {
 	    		} catch (Exception e) {
 	    			
 	    		}
-	        	am.setStreamVolume(streamId, (int)Math.floor(volume), 0);
+	        	am.setStreamVolume(streamId, (int)Math.round(volume), 0);
 	    	}
 		} catch (Exception e) {
 			
