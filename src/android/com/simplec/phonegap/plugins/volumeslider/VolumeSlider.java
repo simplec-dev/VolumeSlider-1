@@ -188,24 +188,18 @@ public class VolumeSlider extends CordovaPlugin {
 	}
 
 	public void setAllVolume(double volume) {
-		int[] streams = null;
-		try {
-			Class c = Class.forName("android.media.AudioManager");
-			streams = (int[])c.getField("DEFAULT_STREAM_VOLUME").get(null);
-		} catch (Exception e) {
-			streams = new int[] {
-			        4,  // STREAM_VOICE_CALL
-			        7,  // STREAM_SYSTEM
-			    //    5,  // STREAM_RING
-			        11, // STREAM_MUSIC
-			        6,  // STREAM_ALARM
-			        5,  // STREAM_NOTIFICATION
-			   //     7,  // STREAM_BLUETOOTH_SCO
-			        7,  // STREAM_SYSTEM_ENFORCED
-			        11, // STREAM_DTMF
-			        11  // STREAM_TTS
-			};
-		}
+		int[] streams = new int[] {
+		        4,  // STREAM_VOICE_CALL
+		        7,  // STREAM_SYSTEM
+		    //    5,  // STREAM_RING
+		        11, // STREAM_MUSIC
+		        6,  // STREAM_ALARM
+		        5,  // STREAM_NOTIFICATION
+		   //     7,  // STREAM_BLUETOOTH_SCO
+		        7,  // STREAM_SYSTEM_ENFORCED
+		        11, // STREAM_DTMF
+		        11  // STREAM_TTS
+		};
 
     	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
 		for (int streamId : streams) {
