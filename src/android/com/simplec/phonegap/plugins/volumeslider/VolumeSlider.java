@@ -90,7 +90,9 @@ public class VolumeSlider extends CordovaPlugin {
 			int progress = seekBar.getProgress();
 			
 			double volume = (double) progress;
-			volume = volume / (double)seekBar.getMax();
+			volume = volume / ((double)seekBar.getMax());
+
+    		Log.e("VolumeSlider", "setting volume callback "+progress+"  max="+seekBar.getMax());
 			setAllVolume(volume);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -102,7 +104,10 @@ public class VolumeSlider extends CordovaPlugin {
 			int progress = seekBar.getProgress();
 			
 			double volume = (double) progress;
-			volume = volume / (double)seekBar.getMax();
+			volume = volume / ((double)seekBar.getMax());
+			
+
+    		Log.e("VolumeSlider", "setting volume callback "+progress+"  max="+seekBar.getMax());
 			setAllVolume(volume);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -112,7 +117,9 @@ public class VolumeSlider extends CordovaPlugin {
 
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			double volume = (double) progress;
-			volume = volume / (double)seekBar.getMax();
+			volume = volume / ((double)seekBar.getMax());
+
+    		Log.e("VolumeSlider", "setting volume callback "+progress+"  max="+seekBar.getMax());
 			setAllVolume(volume);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -189,16 +196,8 @@ public class VolumeSlider extends CordovaPlugin {
 
 	public void setAllVolume(double volume) {
 		int[] streams = new int[] {
-		        4,  // STREAM_VOICE_CALL
-		        7,  // STREAM_SYSTEM
-		    //    5,  // STREAM_RING
-		        11, // STREAM_MUSIC
-		        6,  // STREAM_ALARM
-		        5,  // STREAM_NOTIFICATION
-		   //     7,  // STREAM_BLUETOOTH_SCO
-		        7,  // STREAM_SYSTEM_ENFORCED
-		        11, // STREAM_DTMF
-		        11  // STREAM_TTS
+				AudioManager.STREAM_MUSIC,
+				AudioManager.STREAM_SYSTEM
 		};
 
     	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
