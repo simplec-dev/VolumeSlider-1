@@ -88,12 +88,9 @@ public class VolumeSlider extends CordovaPlugin {
 
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
-			
-			double volume = (double) progress;
-			volume = volume / ((double)seekBar.getMax());
-
-    		Log.e("VolumeSlider", "setting volume callback "+progress+"  max="+seekBar.getMax());
-			setAllVolume(volume);
+		
+    		Log.e("VolumeSlider", "setting volume callback (stop) "+progress+"  max="+seekBar.getMax());
+			setVolume(progress);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
             progressResult.setKeepCallback(true);
@@ -103,12 +100,8 @@ public class VolumeSlider extends CordovaPlugin {
 		public void onStartTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
 			
-			double volume = (double) progress;
-			volume = volume / ((double)seekBar.getMax());
-			
-
-    		Log.e("VolumeSlider", "setting volume callback "+progress+"  max="+seekBar.getMax());
-			setAllVolume(volume);
+    		Log.e("VolumeSlider", "setting volume callback (start) "+progress+"  max="+seekBar.getMax());
+    		setVolume(progress);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
             progressResult.setKeepCallback(true);
@@ -116,11 +109,8 @@ public class VolumeSlider extends CordovaPlugin {
 		}
 
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			double volume = (double) progress;
-			volume = volume / ((double)seekBar.getMax());
-
-    		Log.e("VolumeSlider", "setting volume callback "+progress+"  max="+seekBar.getMax());
-			setAllVolume(volume);
+    		Log.e("VolumeSlider", "setting volume callback (change) "+progress+"  max="+seekBar.getMax());
+			setVolume(progress);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
             progressResult.setKeepCallback(true);
@@ -193,45 +183,28 @@ public class VolumeSlider extends CordovaPlugin {
 			Log.e("VolumeSlider", e.getMessage());
 		}
 	}
-
-	public void setAllVolume(double volume) {
-		int[] streams = new int[] {
-				AudioManager.STREAM_MUSIC,
-				AudioManager.STREAM_SYSTEM
-		};
-
-    	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
-		for (int streamId : streams) {
-        	setStreamVolume(am, streamId, volume);
-		}
-	}
 	
-	public void setStreamVolume(AudioManager am, int streamId, double streamVolume) {
+	public void setVolume(int streamVolume) {
 		try {
-	    	int max = am.getStreamMaxVolume(streamId);
-	    	double volume = ((double)max) * streamVolume;
-    		int iVolume = (int)Math.round(volume);
-
-    		if (AudioManager.STREAM_MUSIC==streamId) {
-	    		Log.e("VolumeSlider", "setting volume for stream "+iVolume+" max="+max+"  test="+Math.round(volume));
-    		}
-    		
-	    	if (Math.round(volume)==0) {
-	    		am.setStreamMute(streamId, true);
+        	AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
+	    	int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+	    	
+	    	if (Math.round(streamVolume)==0) {
+	    		am.setStreamMute(AudioManager.STREAM_MUSIC, true);
 	    	} else {
 	    		try {
 	    			for (int i=1; i<50; i++) {
-	            		am.setStreamMute(streamId, false);
+	            		am.setStreamMute(AudioManager.STREAM_MUSIC, false);
 	    			}
 	    		} catch (Exception e) {
 	    			
 	    		}
-	    		
-	    		
-	        	am.setStreamVolume(streamId, iVolume, 0);
+
+		    	Log.e("VolumeSlider", "setting volume for stream "+streamVolume+" max="+max);
+	        	am.setStreamVolume(AudioManager.STREAM_MUSIC, streamVolume, 0);
 	    	}
 		} catch (Exception e) {
-			
+			Log.e("VolumeSlider", e.getMessage());
 		}
 	}
 }
