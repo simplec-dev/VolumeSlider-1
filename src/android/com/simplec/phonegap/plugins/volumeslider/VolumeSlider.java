@@ -217,6 +217,12 @@ public class VolumeSlider extends CordovaPlugin {
 		try {
 	    	int max = am.getStreamMaxVolume(streamId);
 	    	double volume = ((double)max) * streamVolume;
+    		int iVolume = (int)Math.round(volume);
+
+    		if (AudioManager.STREAM_MUSIC==streamId) {
+	    		Log.e("VolumeSlider", "setting volume for stream "+iVolume+" max="+max+"  test="+Math.round(volume));
+    		}
+    		
 	    	if (Math.round(volume)==0) {
 	    		am.setStreamMute(streamId, true);
 	    	} else {
@@ -228,8 +234,7 @@ public class VolumeSlider extends CordovaPlugin {
 	    			
 	    		}
 	    		
-	    		int iVolume = (int)Math.round(volume);
-	    		Log.e("VolumeSlider", "setting volume for stream "+iVolume);
+	    		
 	        	am.setStreamVolume(streamId, iVolume, 0);
 	    	}
 		} catch (Exception e) {
