@@ -40,7 +40,8 @@
 	}
 	
 	if (self.mpVolumeViewParentView != NULL) {
-        	return;//already created, don't need to create it again
+		[mpVolumeViewParentView release];
+		mpVolumeViewParentView = nil;
 	}
 	
 	CGFloat originx,originy,width;
