@@ -78,6 +78,7 @@
 
 - (void)showVolumeSlider:(CDVInvokedUrlCommand *)command
 {
+	self.callbackId = command.callbackId;
 	self.myVolumeView.showsVolumeSlider = YES;
 	self.mpVolumeViewParentView.hidden = NO;
 }
