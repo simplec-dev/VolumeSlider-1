@@ -91,7 +91,7 @@
 - (void)volumeAdjusted:(UIGestureRecognizer *)recognizer {
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"1"];
         [result setKeepCallbackAsBool:true];
-        [self.command.commandDelegate sendPluginResult:result callbackId:callbackId];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 
