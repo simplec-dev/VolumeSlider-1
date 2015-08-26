@@ -89,7 +89,9 @@
 }
 
 - (void)volumeAdjusted:(UIGestureRecognizer *)recognizer {
-     // reset timer
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"1"];
+        [result setKeepCallbackAsBool:true];
+        [self.command.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 
