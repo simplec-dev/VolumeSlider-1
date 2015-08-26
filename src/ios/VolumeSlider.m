@@ -40,8 +40,9 @@
 	}
 	
 	if (self.mpVolumeViewParentView != NULL) {
-		[mpVolumeViewParentView release];
-		mpVolumeViewParentView = nil;
+		self.myVolumeView.showsVolumeSlider = NO;
+		self.mpVolumeViewParentView = nil; // don't release in auto mode
+		self.myVolumeView = nil;
 	}
 	
 	CGFloat originx,originy,width;
