@@ -70,6 +70,10 @@
 	[[MPVolumeView alloc] initWithFrame: mpVolumeViewParentView.bounds];
 	[mpVolumeViewParentView addSubview: myVolumeView];
 	self.myVolumeView.showsVolumeSlider = NO;
+	
+	UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(volumeAdjusted:)];
+	recognizer.cancelsTouchesInView = NO; 
+	[self.myVolumeView addGestureRecognizer:recognizer];
 }
 
 - (void)showVolumeSlider:(CDVInvokedUrlCommand *)command
@@ -84,6 +88,9 @@
 	self.myVolumeView.showsVolumeSlider = NO;
 }
 
+- (void)volumeAdjusted:(UIGestureRecognizer *)recognizer {
+     // reset timer
+}
 
 
 @end
