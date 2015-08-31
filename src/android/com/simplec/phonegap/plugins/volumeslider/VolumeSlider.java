@@ -89,7 +89,7 @@ public class VolumeSlider extends CordovaPlugin {
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
 		
-    		//Log.e("VolumeSlider", "setting volume callback (stop) "+progress+"  max="+seekBar.getMax());
+    		Log.v("VolumeSlider", "setting volume callback (stop) "+progress+"  max="+seekBar.getMax());
 			setVolume(progress);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -100,7 +100,7 @@ public class VolumeSlider extends CordovaPlugin {
 		public void onStartTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
 			
-    		//Log.e("VolumeSlider", "setting volume callback (start) "+progress+"  max="+seekBar.getMax());
+    		Log.v("VolumeSlider", "setting volume callback (start) "+progress+"  max="+seekBar.getMax());
     		setVolume(progress);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -109,7 +109,7 @@ public class VolumeSlider extends CordovaPlugin {
 		}
 
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-    		//Log.e("VolumeSlider", "setting volume callback (change) "+progress+"  max="+seekBar.getMax());
+    		Log.v("VolumeSlider", "setting volume callback (change) "+progress+"  max="+seekBar.getMax());
 			setVolume(progress);
 			
             PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
