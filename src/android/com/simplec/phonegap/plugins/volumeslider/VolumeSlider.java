@@ -26,6 +26,7 @@ import android.widget.PopupWindow;
 import android.widget.SeekBar;
 
 public class VolumeSlider extends CordovaPlugin {
+	private static final String LOG_TAG = "VolumeSlider";
 	private static final String CREATE_SLIDER = "createVolumeSlider";
 	private static final String SHOW_SLIDER = "showVolumeSlider";
 	private static final String HIDE_SLIDER = "hideVolumeSlider";
@@ -46,7 +47,8 @@ public class VolumeSlider extends CordovaPlugin {
 	public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
 		try {
 			if (CREATE_SLIDER.equals(action)) {
-				Log.e("VolmeSlider", "creating slider execute");
+				Log.e(LOG_TAG, "create");
+				Log.e(LOG_TAG, "creating slider execute");
 
 				originx = data.getInt(0);
 				originy = data.getInt(1);
@@ -55,6 +57,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 				return true;
 			} else if (SHOW_SLIDER.equals(action)) {
+				Log.e(LOG_TAG, "show");
 				if (seekBarWindow != null) {
 					seekBarWindow.dismiss();
 					seekBarWindow = null;
@@ -64,6 +67,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 				View thisView = null;
 				boolean CORDOVA_4 = Integer.valueOf(CordovaWebView.CORDOVA_VERSION.split("\\.")[0]) >= 4;
+				Log.e(LOG_TAG, "CORDOVA_4: "+CORDOVA_4);
 				if (CORDOVA_4) {
 					Method m = webView.getClass().getDeclaredMethod("getView", null);
 					
@@ -71,10 +75,12 @@ public class VolumeSlider extends CordovaPlugin {
 				} else {
 					thisView = ((ViewGroup) webView);
 				}
+				Log.e(LOG_TAG, "creating slider for view: "+thisView);
 				seekBarWindow.showAtLocation(thisView, Gravity.LEFT | Gravity.TOP, originx, originy);
 
 				return true;
 			} else if (HIDE_SLIDER.equals(action)) {
+				Log.e(LOG_TAG, "hide");
 				if (seekBarWindow != null) {
 					seekBarWindow.dismiss();
 					seekBarWindow = null;
@@ -101,7 +107,7 @@ public class VolumeSlider extends CordovaPlugin {
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
 
-			Log.v("VolumeSlider", "setting volume callback (stop) " + progress + "  max=" + seekBar.getMax());
+			Log.v(LOG_TAG, "setting volume callback (stop) " + progress + "  max=" + seekBar.getMax());
 			setVolume(progress);
 
 			PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -112,7 +118,7 @@ public class VolumeSlider extends CordovaPlugin {
 		public void onStartTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
 
-			Log.v("VolumeSlider", "setting volume callback (start) " + progress + "  max=" + seekBar.getMax());
+			Log.v(LOG_TAG, "setting volume callback (start) " + progress + "  max=" + seekBar.getMax());
 			setVolume(progress);
 
 			PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -121,7 +127,7 @@ public class VolumeSlider extends CordovaPlugin {
 		}
 
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			Log.v("VolumeSlider", "setting volume callback (change) " + progress + "  max=" + seekBar.getMax());
+			Log.v(LOG_TAG, "setting volume callback (change) " + progress + "  max=" + seekBar.getMax());
 			setVolume(progress);
 
 			PluginResult progressResult = new PluginResult(PluginResult.Status.OK, progress);
@@ -132,12 +138,15 @@ public class VolumeSlider extends CordovaPlugin {
 
 	public void createSlider(CallbackContext callbackContext) {
 		try {
+			Log.v(LOG_TAG, "createSlider 1");
 			if (seekBarWindow != null) {
+				Log.v(LOG_TAG, "createSlider 2");
 				seekBarWindow.dismiss();
 				seekBarWindow = null;
 			}
 
 			if (seekBarWindow == null) {
+				Log.v(LOG_TAG, "createSlider 3");
 				// Initialize the view
 				LinearLayout ll = new LinearLayout(webView.getContext());
 				ll.setLayoutParams(new LayoutParams(width, height));
@@ -146,12 +155,15 @@ public class VolumeSlider extends CordovaPlugin {
 				// Initialize popup
 				seekBarWindow = new PopupWindow(ll, width, height);
 
+				Log.v(LOG_TAG, "createSlider 4");
 				// Set popup's window layout type to TYPE_TOAST
 				Method[] methods = PopupWindow.class.getMethods();
 				for (Method m : methods) {
 					if (m.getName().equals("setWindowLayoutType")) {
 						try {
+							Log.v(LOG_TAG, "createSlider 5");
 							m.invoke(seekBarWindow, WindowManager.LayoutParams.TYPE_TOAST);
+							Log.v(LOG_TAG, "createSlider 6");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -161,6 +173,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 				SeekBar seekBar = new SeekBar(webView.getContext());
 
+				Log.v(LOG_TAG, "createSlider 7");
 				float[] outR = new float[] { 6, 6, 6, 6, 6, 6, 6, 6 };
 				ShapeDrawable thumb = new ShapeDrawable(new RoundRectShape(outR, null, null));
 				thumb.setIntrinsicHeight(height);
@@ -168,13 +181,15 @@ public class VolumeSlider extends CordovaPlugin {
 				thumb.getPaint().setColor(Color.GRAY);
 				seekBar.setThumb(thumb);
 				seekBar.setPadding(height, 0, height, 0);
+				seekBar.setVisibility(View.VISIBLE);
 
+				Log.v(LOG_TAG, "createSlider 8");
 				AudioManager am = (AudioManager) webView.getContext().getSystemService(Context.AUDIO_SERVICE);
 				int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 				seekBar.setMax(max);
 
 				int iVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-				// Log.e("VolumeSlider", "setting progress value "+iVolume+"
+				// Log.e(LOG_TAG, "setting progress value "+iVolume+"
 				// max="+max);
 				seekBar.setProgress(iVolume);
 
@@ -182,11 +197,14 @@ public class VolumeSlider extends CordovaPlugin {
 				params.gravity = Gravity.CENTER_HORIZONTAL;
 				seekBar.setLayoutParams(params);
 
+				Log.v(LOG_TAG, "createSlider 9");
 				ll.addView(seekBar);
+				ll.setVisibility(View.VISIBLE);
 
 				seekBar.setOnSeekBarChangeListener(new VolumeSeekBarListener(callbackContext));
+				Log.v(LOG_TAG, "createSlider 10");
 			} else {
-				Log.e("VolumeSlider", "updating slider");
+				Log.e(LOG_TAG, "updating slider");
 			}
 
 			// AbsoluteLayout.LayoutParams lp = new
@@ -194,7 +212,7 @@ public class VolumeSlider extends CordovaPlugin {
 			// seekBar.setLayoutParams(lp);
 
 		} catch (Exception e) {
-			Log.e("VolumeSlider", e.getMessage());
+			Log.e(LOG_TAG, e.getMessage());
 		}
 	}
 
@@ -214,12 +232,12 @@ public class VolumeSlider extends CordovaPlugin {
 
 				}
 
-				// Log.e("VolumeSlider", "setting volume for stream
+				// Log.e(LOG_TAG, "setting volume for stream
 				// "+streamVolume+" max="+max);
 				am.setStreamVolume(AudioManager.STREAM_MUSIC, streamVolume, 0);
 			}
 		} catch (Exception e) {
-			Log.e("VolumeSlider", e.getMessage());
+			Log.e(LOG_TAG, e.getMessage());
 		}
 	}
 }
