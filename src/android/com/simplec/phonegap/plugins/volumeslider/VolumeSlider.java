@@ -69,9 +69,17 @@ public class VolumeSlider extends CordovaPlugin {
 				boolean CORDOVA_4 = Integer.valueOf(CordovaWebView.CORDOVA_VERSION.split("\\.")[0]) >= 4;
 				Log.e(LOG_TAG, "CORDOVA_4: "+CORDOVA_4);
 				if (CORDOVA_4) {
-					Method m = webView.getClass().getDeclaredMethod("getView", null);
-					
-					thisView = (ViewGroup) m.invoke(m);//  webView.getView());
+					if (webView.getClass().isAssignableFrom(ViewGroup.class)) {
+						Log.e(LOG_TAG, "it is assignable");
+						thisView = ((ViewGroup) webView);
+					} else {
+						Log.e(LOG_TAG, "using reflection to get method getView");
+						Method m = webView.getClass().getDeclaredMethod("getView", null);
+
+						Log.e(LOG_TAG, "got method: "+m);
+						thisView = (ViewGroup) m.invoke(webView);//  webView.getView());
+						Log.e(LOG_TAG, "invoked method");
+					}
 				} else {
 					thisView = ((ViewGroup) webView);
 				}
