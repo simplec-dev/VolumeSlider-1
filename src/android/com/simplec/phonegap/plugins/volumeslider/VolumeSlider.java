@@ -53,10 +53,18 @@ public class VolumeSlider extends CordovaPlugin {
 				Log.e(LOG_TAG, "create");
 				Log.e(LOG_TAG, "creating slider execute");
 
-				originx = data.getInt(0);
-				originy = data.getInt(1);
-				width = data.getInt(2);
-				height = data.getInt(3);
+				DisplayMetrics screenDensity = cordova.getActivity().getResources().getDisplayMetrics();
+				Log.v(LOG_TAG, "----------------------------");
+				Log.v(LOG_TAG, "webview.xdpi = "+screenDensity.xdpi);
+				Log.v(LOG_TAG, "webview.ydpi = "+screenDensity.ydpi);
+				Log.v(LOG_TAG, "webview.density = "+screenDensity.density);
+				Log.v(LOG_TAG, "webview.densityDpi = "+screenDensity.densityDpi);
+				Log.v(LOG_TAG, "webview.scaledDensity = "+screenDensity.scaledDensity);
+
+				originx = (int)(((float)data.getInt(0)) * screenDensity.density);
+				originy = (int)(((float)data.getInt(1)) * screenDensity.density);
+				width = (int)(((float)data.getInt(2)) * screenDensity.density);
+				height = (int)(((float)data.getInt(3)) * screenDensity.density);
 
 				return true;
 			} else if (SHOW_SLIDER.equals(action)) {
@@ -132,24 +140,6 @@ public class VolumeSlider extends CordovaPlugin {
 
 	public void createSlider(CallbackContext callbackContext) {
 		try {
-			View view = getWebViewFromPlugin();
-			DisplayMetrics webviewMetrics = new DisplayMetrics();
-			view.getDisplay().getMetrics(webviewMetrics);
-
-			Log.v(LOG_TAG, "----------------------------");
-			Log.v(LOG_TAG, "webview.xdpi = "+webviewMetrics.xdpi);
-			Log.v(LOG_TAG, "webview.ydpi = "+webviewMetrics.ydpi);
-			Log.v(LOG_TAG, "webview.density = "+webviewMetrics.density);
-			Log.v(LOG_TAG, "webview.densityDpi = "+webviewMetrics.densityDpi);
-			Log.v(LOG_TAG, "webview.scaledDensity = "+webviewMetrics.scaledDensity);
-
-			DisplayMetrics screenDensity = cordova.getActivity().getResources().getDisplayMetrics();
-			Log.v(LOG_TAG, "----------------------------");
-			Log.v(LOG_TAG, "webview.xdpi = "+screenDensity.xdpi);
-			Log.v(LOG_TAG, "webview.ydpi = "+screenDensity.ydpi);
-			Log.v(LOG_TAG, "webview.density = "+screenDensity.density);
-			Log.v(LOG_TAG, "webview.densityDpi = "+screenDensity.densityDpi);
-			Log.v(LOG_TAG, "webview.scaledDensity = "+screenDensity.scaledDensity);
 
 			Log.v(LOG_TAG, "----------------------------");
 			
