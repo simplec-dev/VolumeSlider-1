@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.media.AudioManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -146,6 +147,26 @@ public class VolumeSlider extends CordovaPlugin {
 
 	public void createSlider(CallbackContext callbackContext) {
 		try {
+			DisplayMetrics webviewMetrics = new DisplayMetrics();
+			webView.getDisplay().getMetrics(webviewMetrics);
+
+			Log.v(LOG_TAG, "----------------------------");
+			Log.v(LOG_TAG, "webview.xdpi = "+webviewMetrics.xdpi);
+			Log.v(LOG_TAG, "webview.ydpi = "+webviewMetrics.ydpi);
+			Log.v(LOG_TAG, "webview.density = "+webviewMetrics.density);
+			Log.v(LOG_TAG, "webview.densityDpi = "+webviewMetrics.densityDpi);
+			Log.v(LOG_TAG, "webview.scaledDensity = "+webviewMetrics.scaledDensity);
+
+			DisplayMetrics screenDensity = cordova.getActivity().getResources().getDisplayMetrics();
+			Log.v(LOG_TAG, "----------------------------");
+			Log.v(LOG_TAG, "webview.xdpi = "+screenDensity.xdpi);
+			Log.v(LOG_TAG, "webview.ydpi = "+screenDensity.ydpi);
+			Log.v(LOG_TAG, "webview.density = "+screenDensity.density);
+			Log.v(LOG_TAG, "webview.densityDpi = "+screenDensity.densityDpi);
+			Log.v(LOG_TAG, "webview.scaledDensity = "+screenDensity.scaledDensity);
+
+			Log.v(LOG_TAG, "----------------------------");
+			
 			Log.v(LOG_TAG, "createSlider 1");
 			if (seekBarWindow != null) {
 				Log.v(LOG_TAG, "createSlider 2");
