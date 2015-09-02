@@ -1,5 +1,6 @@
 package com.simplec.phonegap.plugins.volumeslider;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.cordova.CallbackContext;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
@@ -66,24 +68,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 				createSlider(callbackContext);
 
-				View thisView = null;
-				boolean CORDOVA_4 = Integer.valueOf(CordovaWebView.CORDOVA_VERSION.split("\\.")[0]) >= 4;
-				Log.e(LOG_TAG, "CORDOVA_4: "+CORDOVA_4);
-				if (CORDOVA_4) {
-					if (webView.getClass().isAssignableFrom(ViewGroup.class)) {
-						Log.e(LOG_TAG, "it is assignable");
-						thisView = ((ViewGroup) webView);
-					} else {
-						Log.e(LOG_TAG, "using reflection to get method getView");
-						Method m = webView.getClass().getDeclaredMethod("getView", null);
-
-						Log.e(LOG_TAG, "got method: "+m);
-						thisView = (ViewGroup) m.invoke(webView);//  webView.getView());
-						Log.e(LOG_TAG, "invoked method");
-					}
-				} else {
-					thisView = ((ViewGroup) webView);
-				}
+				View thisView = getWebViewFromPlugin();
 				Log.e(LOG_TAG, "creating slider for view: "+thisView);
 				seekBarWindow.showAtLocation(thisView, Gravity.LEFT | Gravity.TOP, originx, originy);
 
@@ -147,8 +132,9 @@ public class VolumeSlider extends CordovaPlugin {
 
 	public void createSlider(CallbackContext callbackContext) {
 		try {
+			View view = getWebViewFromPlugin();
 			DisplayMetrics webviewMetrics = new DisplayMetrics();
-			webView.getDisplay().getMetrics(webviewMetrics);
+			view.getDisplay().getMetrics(webviewMetrics);
 
 			Log.v(LOG_TAG, "----------------------------");
 			Log.v(LOG_TAG, "webview.xdpi = "+webviewMetrics.xdpi);
@@ -269,4 +255,27 @@ public class VolumeSlider extends CordovaPlugin {
 			Log.e(LOG_TAG, e.getMessage());
 		}
 	}
+    
+    public WebView getWebViewFromPlugin() throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	WebView thisView = null;
+		boolean CORDOVA_4 = Integer.valueOf(CordovaWebView.CORDOVA_VERSION.split("\\.")[0]) >= 4;
+		Log.e(LOG_TAG, "CORDOVA_4: "+CORDOVA_4);
+		if (CORDOVA_4) {
+			if (webView.getClass().isAssignableFrom(WebView.class)) {
+				Log.e(LOG_TAG, "it is assignable");
+				thisView = ((WebView) webView);
+			} else {
+				Log.e(LOG_TAG, "using reflection to get method getView");
+				Method m = webView.getClass().getDeclaredMethod("getView", null);
+
+				Log.e(LOG_TAG, "got method: "+m);
+				thisView = (WebView) m.invoke(webView);//  webView.getView());
+				Log.e(LOG_TAG, "invoked method");
+			}
+		} else {
+			thisView = ((WebView) webView);
+		}
+		
+		return thisView;
+    }
 }
