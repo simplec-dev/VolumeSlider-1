@@ -20,6 +20,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.webkit.WebView;
@@ -153,10 +154,8 @@ public class VolumeSlider extends CordovaPlugin {
 				Log.v(LOG_TAG, "createSlider 3");
 				
 				WebView view = getWebViewFromPlugin();
-				View v = view;
-				while (v.getRootView()!=null) {
-					v = v.getRootView();
-				}
+				View v = view.getRootView();
+				
 				// Initialize the view
 				LinearLayout ll = new LinearLayout(v.getContext());
 				ll.setLayoutParams(new LayoutParams(width, height));
@@ -164,7 +163,7 @@ public class VolumeSlider extends CordovaPlugin {
 				ll.setClickable(true);
 
 				// Initialize popup
-				seekBarWindow = new PopupWindow(ll, width, height, true);
+				seekBarWindow = new PopupWindow(v, width, height, true);
 				seekBarWindow.setTouchable(true);
 
 				Log.v(LOG_TAG, "createSlider 4");
@@ -183,7 +182,7 @@ public class VolumeSlider extends CordovaPlugin {
 					}
 				}
 
-				SeekBar seekBar = new SeekBar(webView.getContext());
+				SeekBar seekBar = new SeekBar(v.getContext());
 				seekBar.setClickable(true);
 
 				Log.v(LOG_TAG, "createSlider 7");
