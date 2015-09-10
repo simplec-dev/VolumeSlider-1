@@ -153,16 +153,14 @@ public class VolumeSlider extends CordovaPlugin {
 			if (seekBarWindow == null) {
 				Log.v(LOG_TAG, "createSlider 3");
 				
-				WebView view = getWebViewFromPlugin();
-				View v = cordova.getActivity().getWindow().getDecorView();
-				
 				// Initialize the view
 				LinearLayout ll = new LinearLayout(cordova.getActivity());
 				ll.setLayoutParams(new LayoutParams(width, height));
 				ll.setBackgroundColor(Color.WHITE);
 
 				// Initialize popup
-				seekBarWindow = new PopupWindow(cordova.getActivity());
+				seekBarWindow = new PopupWindow(cordova.getActivity().getParent());
+				seekBarWindow.setContentView(ll);
 
 				Log.v(LOG_TAG, "createSlider 4");
 				// Set popup's window layout type to TYPE_TOAST
@@ -180,7 +178,7 @@ public class VolumeSlider extends CordovaPlugin {
 					}
 				}
 
-				SeekBar seekBar = new SeekBar(cordova.getActivity());
+				SeekBar seekBar = new SeekBar(cordova.getActivity().getParent());
 
 				Log.v(LOG_TAG, "createSlider 7");
 				float[] outR = new float[] { 6, 6, 6, 6, 6, 6, 6, 6 };
@@ -209,8 +207,6 @@ public class VolumeSlider extends CordovaPlugin {
 				Log.v(LOG_TAG, "createSlider 9");
 				ll.addView(seekBar);
 				ll.setVisibility(View.VISIBLE);
-				
-				seekBarWindow.setContentView(ll);
 
 				seekBar.setOnSeekBarChangeListener(new VolumeSeekBarListener(callbackContext));
 				Log.v(LOG_TAG, "createSlider 10");
