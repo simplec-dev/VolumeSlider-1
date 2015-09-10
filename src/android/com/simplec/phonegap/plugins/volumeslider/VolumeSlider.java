@@ -78,7 +78,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 				View thisView = getWebViewFromPlugin();
 				Log.e(LOG_TAG, "creating slider for view: "+thisView);
-				seekBarWindow.showAtLocation(thisView, Gravity.LEFT | Gravity.TOP, originx, originy);
+				seekBarWindow.showAtLocation(thisView.getRootView(), Gravity.LEFT | Gravity.TOP, originx, originy);
 
 				return true;
 			} else if (HIDE_SLIDER.equals(action)) {
@@ -159,7 +159,7 @@ public class VolumeSlider extends CordovaPlugin {
 				// Initialize the view
 				LinearLayout ll = new LinearLayout(cordova.getActivity());
 				ll.setLayoutParams(new LayoutParams(width, height));
-				ll.setBackgroundColor(Color.TRANSPARENT);
+				ll.setBackgroundColor(Color.WHITE);
 
 				// Initialize popup
 				seekBarWindow = new PopupWindow(cordova.getActivity());
