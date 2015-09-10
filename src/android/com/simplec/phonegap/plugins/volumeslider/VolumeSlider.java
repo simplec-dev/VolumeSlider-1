@@ -159,16 +159,6 @@ public class VolumeSlider extends CordovaPlugin {
 
 				// Initialize popup
 				seekBarWindow = new PopupWindow(ll, width, height);
-				seekBarWindow.setTouchable(true);
-				seekBarWindow.setFocusable(true);
-				seekBarWindow.setOutsideTouchable(true);  
-				seekBarWindow.setTouchInterceptor(new View.OnTouchListener() {
-			          @Override
-			          public boolean onTouch(View v, MotionEvent event) {
-			        	  Log.e(LOG_TAG, "I GOT A TOUCH -- FINALLY");
-			            return false;
-			          }
-			        });
 
 				Log.v(LOG_TAG, "createSlider 4");
 				// Set popup's window layout type to TYPE_TOAST
