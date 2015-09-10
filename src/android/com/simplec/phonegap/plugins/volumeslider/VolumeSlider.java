@@ -12,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
-import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
@@ -153,9 +152,13 @@ public class VolumeSlider extends CordovaPlugin {
 			if (seekBarWindow == null) {
 				Log.v(LOG_TAG, "createSlider 3");
 				
-				GestureOverlayView ll = new GestureOverlayView(webView.getContext());
+				WebView view = getWebViewFromPlugin();
+				View v = view;
+				while (v.getRootView()!=null) {
+					v = v.getRootView();
+				}
 				// Initialize the view
-				//LinearLayout ll = new LinearLayout(webView.getContext());
+				LinearLayout ll = new LinearLayout(v.getContext());
 				ll.setLayoutParams(new LayoutParams(width, height));
 				ll.setBackgroundColor(Color.WHITE);//.TRANSPARENT);
 				ll.setClickable(true);
