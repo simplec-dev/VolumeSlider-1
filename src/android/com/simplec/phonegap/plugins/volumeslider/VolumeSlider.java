@@ -155,7 +155,7 @@ public class VolumeSlider extends CordovaPlugin {
 				// Initialize the view
 				LinearLayout ll = new LinearLayout(webView.getContext());
 				ll.setLayoutParams(new LayoutParams(width, height));
-				ll.setBackgroundColor(Color.TRANSPARENT);
+				ll.setBackgroundColor(Color.WHITE);//.TRANSPARENT);
 
 				// Initialize popup
 				seekBarWindow = new PopupWindow(ll, width, height);
