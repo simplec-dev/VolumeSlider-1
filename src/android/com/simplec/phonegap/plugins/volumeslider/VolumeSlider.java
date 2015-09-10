@@ -157,11 +157,10 @@ public class VolumeSlider extends CordovaPlugin {
 				ll.setLayoutParams(new LayoutParams(width, height));
 				ll.setBackgroundColor(Color.WHITE);//.TRANSPARENT);
 				ll.setClickable(true);
-				ll.setFilterTouchesWhenObscured(false);
-				ll.setFocusableInTouchMode(true);
 
 				// Initialize popup
 				seekBarWindow = new PopupWindow(ll, width, height);
+				seekBarWindow.setTouchable(true);
 
 				Log.v(LOG_TAG, "createSlider 4");
 				// Set popup's window layout type to TYPE_TOAST
@@ -180,6 +179,7 @@ public class VolumeSlider extends CordovaPlugin {
 				}
 
 				SeekBar seekBar = new SeekBar(webView.getContext());
+				seekBar.setClickable(true);
 
 				Log.v(LOG_TAG, "createSlider 7");
 				float[] outR = new float[] { 6, 6, 6, 6, 6, 6, 6, 6 };
