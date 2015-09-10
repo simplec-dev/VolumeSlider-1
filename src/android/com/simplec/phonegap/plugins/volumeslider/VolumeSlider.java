@@ -154,17 +154,15 @@ public class VolumeSlider extends CordovaPlugin {
 				Log.v(LOG_TAG, "createSlider 3");
 				
 				WebView view = getWebViewFromPlugin();
-				View v = view.getRootView();
+				View v = cordova.getActivity().getWindow().getDecorView();
 				
 				// Initialize the view
-				LinearLayout ll = new LinearLayout(v.getContext());
+				LinearLayout ll = new LinearLayout(cordova.getActivity());
 				ll.setLayoutParams(new LayoutParams(width, height));
-				ll.setBackgroundColor(Color.WHITE);//.TRANSPARENT);
-				ll.setClickable(true);
+				ll.setBackgroundColor(Color.TRANSPARENT);
 
 				// Initialize popup
-				seekBarWindow = new PopupWindow(v.getContext());
-				seekBarWindow.setTouchable(true);
+				seekBarWindow = new PopupWindow(cordova.getActivity());
 
 				Log.v(LOG_TAG, "createSlider 4");
 				// Set popup's window layout type to TYPE_TOAST
@@ -182,8 +180,7 @@ public class VolumeSlider extends CordovaPlugin {
 					}
 				}
 
-				SeekBar seekBar = new SeekBar(v.getContext());
-				seekBar.setClickable(true);
+				SeekBar seekBar = new SeekBar(cordova.getActivity());
 
 				Log.v(LOG_TAG, "createSlider 7");
 				float[] outR = new float[] { 6, 6, 6, 6, 6, 6, 6, 6 };
@@ -208,12 +205,12 @@ public class VolumeSlider extends CordovaPlugin {
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 				params.gravity = Gravity.CENTER_HORIZONTAL;
 				seekBar.setLayoutParams(params);
-				seekBar.bringToFront();
-				ll.bringToFront();
 
 				Log.v(LOG_TAG, "createSlider 9");
 				ll.addView(seekBar);
 				ll.setVisibility(View.VISIBLE);
+				
+				seekBarWindow.setContentView(ll);
 
 				seekBar.setOnSeekBarChangeListener(new VolumeSeekBarListener(callbackContext));
 				Log.v(LOG_TAG, "createSlider 10");
