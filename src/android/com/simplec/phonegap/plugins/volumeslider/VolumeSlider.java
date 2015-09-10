@@ -177,7 +177,8 @@ public class VolumeSlider extends CordovaPlugin {
 					if (m.getName().equals("setWindowLayoutType")) {
 						try {
 							Log.v(LOG_TAG, "createSlider 5");
-							m.invoke(seekBarWindow, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY);
+							//m.invoke(seekBarWindow, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY);
+							//m.invoke(seekBarWindow, WindowManager.LayoutParams.type);
 							Log.v(LOG_TAG, "createSlider 6");
 						} catch (Exception e) {
 							e.printStackTrace();
