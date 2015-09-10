@@ -201,6 +201,7 @@ public class VolumeSlider extends CordovaPlugin {
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
 				params.gravity = Gravity.CENTER_HORIZONTAL;
 				seekBar.setLayoutParams(params);
+				seekBar.bringToFront();
 
 				Log.v(LOG_TAG, "createSlider 9");
 				ll.addView(seekBar);
