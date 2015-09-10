@@ -163,7 +163,7 @@ public class VolumeSlider extends CordovaPlugin {
 				ll.setClickable(true);
 
 				// Initialize popup
-				seekBarWindow = new PopupWindow(v, width, height, true);
+				seekBarWindow = new PopupWindow(v.getContext());
 				seekBarWindow.setTouchable(true);
 
 				Log.v(LOG_TAG, "createSlider 4");
