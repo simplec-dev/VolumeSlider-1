@@ -66,6 +66,9 @@ public class VolumeSlider extends CordovaPlugin {
 				width = (int)(((float)data.getInt(2)) * screenDensity.density);
 				height = (int)(((float)data.getInt(3)) * screenDensity.density);
 
+				Log.v(LOG_TAG, "width = "+width);
+				Log.v(LOG_TAG, "height = "+height);
+
 				return true;
 			} else if (SHOW_SLIDER.equals(action)) {
 				Log.e(LOG_TAG, "show");
@@ -151,7 +154,7 @@ public class VolumeSlider extends CordovaPlugin {
 			}
 
 			if (seekBarWindow == null) {
-				Log.v(LOG_TAG, "createSlider 3");
+				Log.v(LOG_TAG, "createSlider 3 width="+width+" height="+height);
 				// Initialize the view
 				LinearLayout ll = new LinearLayout(webView.getContext());
 				ll.setLayoutParams(new LayoutParams(width, height));
