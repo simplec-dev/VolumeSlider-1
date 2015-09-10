@@ -153,7 +153,7 @@ public class VolumeSlider extends CordovaPlugin {
 			if (seekBarWindow == null) {
 				Log.v(LOG_TAG, "createSlider 3");
 				// Initialize the view
-				LinearLayout ll = new LinearLayout(webView.getContext());
+				LinearLayout ll = new LinearLayout(webView.getContext().getApplicationContext());
 				ll.setLayoutParams(new LayoutParams(width, height));
 				ll.setBackgroundColor(Color.WHITE);//.TRANSPARENT);
 				ll.setClickable(true);
