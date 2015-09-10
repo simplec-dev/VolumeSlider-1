@@ -19,8 +19,8 @@ import android.media.AudioManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.webkit.WebView;
@@ -78,7 +78,7 @@ public class VolumeSlider extends CordovaPlugin {
 
 				View thisView = getWebViewFromPlugin();
 				Log.e(LOG_TAG, "creating slider for view: "+thisView);
-				seekBarWindow.showAtLocation(thisView.getRootView(), Gravity.LEFT | Gravity.TOP, originx, originy);
+				seekBarWindow.showAtLocation(thisView, Gravity.LEFT | Gravity.TOP, originx, originy);
 
 				return true;
 			} else if (HIDE_SLIDER.equals(action)) {
@@ -152,15 +152,23 @@ public class VolumeSlider extends CordovaPlugin {
 
 			if (seekBarWindow == null) {
 				Log.v(LOG_TAG, "createSlider 3");
-				
 				// Initialize the view
-				LinearLayout ll = new LinearLayout(cordova.getActivity());
+				LinearLayout ll = new LinearLayout(webView.getContext());
 				ll.setLayoutParams(new LayoutParams(width, height));
-				ll.setBackgroundColor(Color.WHITE);
+				ll.setBackgroundColor(Color.TRANSPARENT);
 
 				// Initialize popup
-				seekBarWindow = new PopupWindow(cordova.getActivity().getParent());
-				seekBarWindow.setContentView(ll);
+				seekBarWindow = new PopupWindow(ll, width, height);
+				seekBarWindow.setTouchable(true);
+				seekBarWindow.setFocusable(true);
+				seekBarWindow.setOutsideTouchable(true);  
+				seekBarWindow.setTouchInterceptor(new View.OnTouchListener() {
+			          @Override
+			          public boolean onTouch(View v, MotionEvent event) {
+			        	  Log.e(LOG_TAG, "I GOT A TOUCH -- FINALLY");
+			            return false;
+			          }
+			        });
 
 				Log.v(LOG_TAG, "createSlider 4");
 				// Set popup's window layout type to TYPE_TOAST
@@ -178,7 +186,7 @@ public class VolumeSlider extends CordovaPlugin {
 					}
 				}
 
-				SeekBar seekBar = new SeekBar(cordova.getActivity().getParent());
+				SeekBar seekBar = new SeekBar(webView.getContext());
 
 				Log.v(LOG_TAG, "createSlider 7");
 				float[] outR = new float[] { 6, 6, 6, 6, 6, 6, 6, 6 };
